@@ -4,8 +4,8 @@ import { visualState } from '../state/animationState'
 import { useRecoilValue } from 'recoil'
 const Chart = ({ array, length, indices }) => {
 	// console.log('array in chart', array) i == indices.i || i == indices.j
-	let visualArray = useRecoilValue(visualState)
-	console.log('in chart ', visualArray)
+	// let visualArray = useRecoilValue(visualState)
+	// console.log('in chart ', visualArray)
 	return (
 		<div className='Chart'>
 			{array && array.length ? (

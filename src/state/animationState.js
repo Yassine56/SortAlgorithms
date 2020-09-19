@@ -9,6 +9,7 @@ export const visualState = atom({
 			j: null,
 		},
 		length: 100,
+		sequence: 0,
 	}, // default value (aka initial value)
 })
 export const traceState = atom({
@@ -23,4 +24,9 @@ export const traceState = atom({
 			sequence: null,
 		},
 	],
+})
+
+export const timeoutIds = atom({
+	key: 'timeOutId',
+	default: [],
 })
