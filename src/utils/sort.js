@@ -29,3 +29,19 @@ export const calculateTrace = (trace, array, i, j, sequence) => {
 		sequence,
 	})
 }
+
+export const bubbleSort = (array) => {
+	let len = array.length
+	let trace = []
+	let sequence = 0
+	for (let i = 0; i < len; i++) {
+		for (let j = 0; j < len; j++) {
+			if (array[j] > array[j + 1]) {
+				swap(array, j, j + 1)
+				calculateTrace(trace, array, j, j + 1, sequence++)
+			}
+		}
+	}
+	calculateTrace(trace, array, null, null, sequence++)
+	return [array, trace]
+}
