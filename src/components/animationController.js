@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { selectionSort } from '../utils/sort'
+import { selectionSort, bubbleSort } from '../utils/sort'
 import { traceState, visualState, timeoutIds } from '../state/animationState'
 import { useRecoilState } from 'recoil'
 import { generate } from './generate'
@@ -7,9 +7,15 @@ const AnimationController = () => {
 	let [trace, setTrace] = useRecoilState(traceState)
 	let [timeOutIds, setTimeOutIds] = useRecoilState(timeoutIds)
 	let [visualArray, setVisualArray] = useRecoilState(visualState)
+	let [algorithm, setAlgorithm] = useState('selection')
+
+	const sortMapping = {
+		selection: selectionSort,
+		bubble: bubbleSort,
+	}
 
 	const onSortClick = () => {
-		let [sortedArray, trace] = selectionSort([...visualArray.array])
+		let [sortedArray, trace] = sortMapping[algorithm]([...visualArray.array])
 		setTrace(trace)
 		run(trace)
 	}
@@ -81,6 +87,18 @@ const AnimationController = () => {
 		setTimeOutIds([...tempTimeOutids])
 	}
 
+	const renderSortingoptions = () => {
+		let options = ['selection', 'bubble']
+		return options.map((option) => (
+			<option key={option} value={option}>
+				{option}
+			</option>
+		))
+	}
+
+	const onAlgoChange = ({ target: { value } }) => {
+		setAlgorithm(value)
+	}
 	return (
 		<div>
 			<h1>Hello world</h1>
@@ -90,6 +108,7 @@ const AnimationController = () => {
 			<button onClick={resume}>resume</button>
 			<button onClick={previous}>previous</button>
 			<button onClick={next}>next</button>
+			<select onChange={onAlgoChange}>{renderSortingoptions()}</select>
 		</div>
 	)
 }
