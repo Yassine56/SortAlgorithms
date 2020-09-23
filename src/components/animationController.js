@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { selectionSort, bubbleSort } from '../utils/sort'
+import { selectionSort, bubbleSort, insertionSort, quickSort } from '../utils/sort'
 import { traceState, visualState, timeoutIds } from '../state/animationState'
 import { useRecoilState } from 'recoil'
 import { generate } from './generate'
@@ -12,6 +12,8 @@ const AnimationController = () => {
 	const sortMapping = {
 		selection: selectionSort,
 		bubble: bubbleSort,
+		insertion: insertionSort,
+		quick: quickSort,
 	}
 
 	const onSortClick = () => {
@@ -82,13 +84,13 @@ const AnimationController = () => {
 					indices: item.indices,
 					sequence: i,
 				})
-			}, 100 * i)
+			}, 200 * i)
 		})
 		setTimeOutIds([...tempTimeOutids])
 	}
 
 	const renderSortingoptions = () => {
-		let options = ['selection', 'bubble']
+		let options = Object.keys(sortMapping)
 		return options.map((option) => (
 			<option key={option} value={option}>
 				{option}
