@@ -1,13 +1,30 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { selectionSort, bubbleSort, insertionSort, quickSort } from '../utils/sort'
 import { traceState, visualState, timeoutIds } from '../state/animationState'
 import { useRecoilState } from 'recoil'
 import { generate } from './generate'
+import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled'
+import SkipPreviousIcon from '@material-ui/icons/SkipPrevious'
+import SkipNextIcon from '@material-ui/icons/SkipNext'
+import ShuffleIcon from '@material-ui/icons/Shuffle'
+import PauseCircleFilledIcon from '@material-ui/icons/PauseCircleFilled'
+
 const AnimationController = () => {
 	let [trace, setTrace] = useRecoilState(traceState)
 	let [timeOutIds, setTimeOutIds] = useRecoilState(timeoutIds)
 	let [visualArray, setVisualArray] = useRecoilState(visualState)
 	let [algorithm, setAlgorithm] = useState('selection')
+	let [isPlaying, setIsplaying] = useState(false)
+	let [shouldResume, setShouldResume] = useState(false)
+
+	useEffect(() => {
+		if (trace.length && visualArray.sequence + 1 === trace.length) {
+			setShouldResume(false)
+			setIsplaying(false)
+		} else if (trace.length && visualArray.sequence + 1 !== trace.length) {
+			setShouldResume(true)
+		}
+	}, [visualArray, trace])
 
 	const sortMapping = {
 		selection: selectionSort,
@@ -68,10 +85,13 @@ const AnimationController = () => {
 			}, 100 * i)
 		})
 		setTimeOutIds([...tempTimeOutids])
+		setIsplaying(true)
 	}
 
 	const reset = () => {
 		timeOutIds.forEach((id) => clearTimeout(id))
+		setIsplaying(false)
+		setShouldResume(true)
 	}
 
 	console.log('timeOutIds', visualArray.sequence)
@@ -87,6 +107,7 @@ const AnimationController = () => {
 			}, 200 * i)
 		})
 		setTimeOutIds([...tempTimeOutids])
+		setIsplaying(true)
 	}
 
 	const renderSortingoptions = () => {
@@ -104,12 +125,16 @@ const AnimationController = () => {
 	return (
 		<div>
 			<h1>Hello world</h1>
-			<button onClick={onButonClick}>generate</button>
-			<button onClick={onSortClick}>sort</button>
-			<button onClick={reset}>reset</button>
-			<button onClick={resume}>resume</button>
-			<button onClick={previous}>previous</button>
-			<button onClick={next}>next</button>
+			<ShuffleIcon onClick={onButonClick} />
+			<SkipPreviousIcon onClick={previous} />
+			{isPlaying ? (
+				<PauseCircleFilledIcon onClick={reset} />
+			) : (
+				<PlayCircleFilledIcon onClick={shouldResume ? resume : onSortClick} />
+			)}
+
+			{/* <button onClick={resume}>resume</button> */}
+			<SkipNextIcon onClick={next} />
 			<select onChange={onAlgoChange}>{renderSortingoptions()}</select>
 		</div>
 	)
