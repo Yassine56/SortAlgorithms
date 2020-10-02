@@ -30,3 +30,7 @@ export const timeoutIds = atom({
 	key: 'timeOutId',
 	default: [],
 })
+export const arrayLength = atom({
+	key: 'arrayLength',
+	default: 20,
+})

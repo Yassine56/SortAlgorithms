@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { selectionSort, bubbleSort, insertionSort, quickSort } from '../utils/sort'
-import { traceState, visualState, timeoutIds } from '../state/animationState'
+import { traceState, visualState, timeoutIds, arrayLength } from '../state/animationState'
 import { useRecoilState } from 'recoil'
 import { generate } from './generate'
 import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled'
@@ -10,6 +10,7 @@ import ShuffleIcon from '@material-ui/icons/Shuffle'
 import PauseCircleFilledIcon from '@material-ui/icons/PauseCircleFilled'
 import { makeStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
+import Slider from '@material-ui/core/Slider'
 // import Paper from '@material-ui/core/Paper'
 
 const useStyles = makeStyles((theme) => ({
@@ -17,6 +18,7 @@ const useStyles = makeStyles((theme) => ({
 		flexGrow: 1,
 		display: 'flex',
 		flexWrap: 'wrap',
+		backgroundColor: 'black',
 	},
 	element: {
 		padding: theme.spacing(2),
@@ -25,6 +27,9 @@ const useStyles = makeStyles((theme) => ({
 		width: '80%',
 		borderRadius: '15px',
 		backgroundColor: '#6892b3',
+	},
+	slider: {
+		width: 300,
 	},
 }))
 
@@ -35,6 +40,7 @@ const AnimationController = () => {
 	let [algorithm, setAlgorithm] = useState('selection')
 	let [isPlaying, setIsplaying] = useState(false)
 	let [shouldResume, setShouldResume] = useState(false)
+	let [length, setLength] = useRecoilState(arrayLength)
 	const classes = useStyles()
 
 	useEffect(() => {
@@ -143,9 +149,33 @@ const AnimationController = () => {
 	const onAlgoChange = ({ target: { value } }) => {
 		setAlgorithm(value)
 	}
+	const onLengthChange = (e, newVal) => {
+		newVal = newVal || 10
+		console.log(e)
+		setVisualArray({
+			...visualArray,
+			array: generate(newVal),
+		})
+		setLength(newVal)
+	}
 	return (
 		<div>
 			<div className={classes.root}>
+				<Grid container spacing={7} direction='row' justify='center'>
+					<Grid item xs={8}>
+						<Slider
+							defaultValue={30}
+							getAriaValueText={(value) => value}
+							aria-labelledby='discrete-slider'
+							valueLabelDisplay='auto'
+							step={2}
+							marks
+							min={10}
+							max={100}
+							onChange={onLengthChange}
+						/>
+					</Grid>
+				</Grid>
 				<Grid container alignItems='center' direction='row' justify='center' spacing={2}>
 					<Grid item xs={1}>
 						<ShuffleIcon className={classes.element} onClick={onButonClick} />
@@ -171,6 +201,9 @@ const AnimationController = () => {
 							{renderSortingoptions()}
 						</select>
 					</Grid>
+					{/* <Grid item xs={2}>
+						<input type='number' value={length} onChange={onLengthChange} />
+					</Grid> */}
 				</Grid>
 			</div>
 		</div>
