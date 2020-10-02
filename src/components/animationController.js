@@ -8,6 +8,25 @@ import SkipPreviousIcon from '@material-ui/icons/SkipPrevious'
 import SkipNextIcon from '@material-ui/icons/SkipNext'
 import ShuffleIcon from '@material-ui/icons/Shuffle'
 import PauseCircleFilledIcon from '@material-ui/icons/PauseCircleFilled'
+import { makeStyles } from '@material-ui/core/styles'
+import Grid from '@material-ui/core/Grid'
+// import Paper from '@material-ui/core/Paper'
+
+const useStyles = makeStyles((theme) => ({
+	root: {
+		flexGrow: 1,
+		display: 'flex',
+		flexWrap: 'wrap',
+	},
+	element: {
+		padding: theme.spacing(2),
+		textAlign: 'center',
+		color: theme.palette.text.primary,
+		width: '80%',
+		borderRadius: '15px',
+		backgroundColor: '#6892b3',
+	},
+}))
 
 const AnimationController = () => {
 	let [trace, setTrace] = useRecoilState(traceState)
@@ -16,6 +35,7 @@ const AnimationController = () => {
 	let [algorithm, setAlgorithm] = useState('selection')
 	let [isPlaying, setIsplaying] = useState(false)
 	let [shouldResume, setShouldResume] = useState(false)
+	const classes = useStyles()
 
 	useEffect(() => {
 		if (trace.length && visualArray.sequence + 1 === trace.length) {
@@ -45,6 +65,7 @@ const AnimationController = () => {
 			...visualArray,
 			array,
 		})
+		setShouldResume(false)
 	}
 	// actions
 
@@ -124,18 +145,34 @@ const AnimationController = () => {
 	}
 	return (
 		<div>
-			<h1>Hello world</h1>
-			<ShuffleIcon onClick={onButonClick} />
-			<SkipPreviousIcon onClick={previous} />
-			{isPlaying ? (
-				<PauseCircleFilledIcon onClick={reset} />
-			) : (
-				<PlayCircleFilledIcon onClick={shouldResume ? resume : onSortClick} />
-			)}
-
-			{/* <button onClick={resume}>resume</button> */}
-			<SkipNextIcon onClick={next} />
-			<select onChange={onAlgoChange}>{renderSortingoptions()}</select>
+			<div className={classes.root}>
+				<Grid container alignItems='center' direction='row' justify='center' spacing={2}>
+					<Grid item xs={1}>
+						<ShuffleIcon className={classes.element} onClick={onButonClick} />
+					</Grid>
+					<Grid item xs={1}>
+						<SkipPreviousIcon className={classes.element} onClick={previous} />
+					</Grid>
+					<Grid item xs={1}>
+						{isPlaying ? (
+							<PauseCircleFilledIcon className={classes.element} onClick={reset} />
+						) : (
+							<PlayCircleFilledIcon
+								className={classes.element}
+								onClick={shouldResume ? resume : onSortClick}
+							/>
+						)}
+					</Grid>
+					<Grid item xs={1}>
+						<SkipNextIcon className={classes.element} onClick={next} />
+					</Grid>
+					<Grid item xs={2}>
+						<select className={classes.element} onChange={onAlgoChange}>
+							{renderSortingoptions()}
+						</select>
+					</Grid>
+				</Grid>
+			</div>
 		</div>
 	)
 }

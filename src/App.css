@@ -7,9 +7,7 @@
 	text-align: center;
 	width: 800px;
 	height: 500px;
-	background-color: grey;
-	padding: 0%;
-	margin-left: 100px;
+	background-color: #b6aeae;
 	display: flex;
 	align-items: flex-end;
 }

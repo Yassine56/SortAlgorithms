@@ -6,8 +6,9 @@ import { RecoilRoot } from 'recoil'
 const App = () => {
 	return (
 		<RecoilRoot>
-			<AnimationController />
 			<ArrayVisualizer />
+			<br />
+			<AnimationController />
 		</RecoilRoot>
 	)
 }
